@@ -8,6 +8,11 @@ import getInfoFromFipeTable from '../infoFipeTable';
 // { "key": "palio-4828", "name": "Palio 1.0 ECONOMY Fire Flex 8V 4p", "id": "4828", "fipe_name": "Palio 1.0 ECONOMY Fire Flex 8V 4p" },
 // { "key": "palio-505", "name": "Palio 1.0/ Trofeo 1.0 Fire/ Fire Flex 2p", "id": "505", "fipe_name": "Palio 1.0/ Trofeo 1.0 Fire/ Fire Flex 2p" }]
 const url = 'http://fipeapi.appspot.com/api/1/carros';
+let ids = [];
+let typeList = [];
+let vehiclelist = [];
+let modelList = [];
+let preco = '';
 
 class TableSelects extends React.Component {
   constructor(props) {
@@ -16,44 +21,51 @@ class TableSelects extends React.Component {
     this.state = {
       click: false,
     }
-    //this.updateSelects = this.updateSelects.bind(this);
+    this.updateSelects = this.updateSelects.bind(this);
   }
+
   async inicia() {
     try {
-      const array = await getInfoFromFipeTable(`${url}/marcas.json`);
-      (array) => { this.props.typeList = [...array]};
-      this.setState({ click: true })
+      typeList = await getInfoFromFipeTable(`${url}/marcas.json`);
+      return array;
     }
     catch (error) {
-      console.log('Error:');
+      console.log('Error: ' + error);
+    }
+    finally {
+      this.setState({ click: true });
     }
   }
 
   componentDidMount() {
     this.inicia();
+    console.log(typeList);
   }
 
   async updateSelects(event) {
     if (event.target.parentElement.selectedIndex !== undefined) {
       try {
         const id = event.target.id;
-        if (event.target.parentElement.id === 'type') {
+        preco='';
+        if (event.target.parentElement.name === 'type') {
           ids[0] = id;
           const array = await getInfoFromFipeTable(`${url}/veiculos/${ids[0]}.json`);
-          this.props.vehiclelist = [...array];
-          this.props.modelList = [];
-        } else if (event.target.parentElement.id === 'vehicle') {
+          vehiclelist = [...array];
+          modelList = [];
+        } else if (event.target.parentElement.name === 'vehicle') {
           ids[1] = id;
           const array = await getInfoFromFipeTable(`${url}/veiculo/${ids[0]}/${ids[1]}.json`);
-          this.props.modelList = [...array];
+          modelList = [...array];
         } else {
           ids[2] = id;
           const array = await getInfoFromFipeTable(`${url}/veiculo/${ids[0]}/${ids[1]}/${ids[2]}.json`);
-          this.props.preco = array.preco;
+          preco = array.preco;
         }
-        this.setState({ click: this.state.click ? false : true });
       } catch (error) {
         console.log('Erro:', error);
+      }
+      finally{
+        this.setState({ click: this.state.click ? false : true });
       }
     }
   }
@@ -65,30 +77,22 @@ class TableSelects extends React.Component {
           <tbody>
             <tr>
               <td>
-                <CarSelect name='type' onClick={this.updateSelects} list={this.props.typeList} />
+                <CarSelect name='type' onClick={this.updateSelects} list={typeList} />
               </td>
               <td>
-                <CarSelect name='vehicle' onClick={this.updateSelects} list={this.props.vehiclelist} />
+                <CarSelect name='vehicle' onClick={this.updateSelects} list={vehiclelist} />
               </td>
               <td>
-                <CarSelect name='model' onClick={this.updateSelects} list={this.props.modelList} />
+                <CarSelect name='model' onClick={this.updateSelects} list={modelList} />
               </td>
             </tr>
           </tbody>
         </table>
-
-        <h1 id='preco' align='center'>{this.props.preco}</h1>
+        <h1 id='preco' align='center'>{preco}</h1>
       </div>)
+  } catch(error) {
+    console.log('Erro:', error);
   }
 }
-
-
-TableSelects.defaultProps = {
-  ids: [],
-  typeList: [],
-  vehiclelist: [],
-  modelList: [],
-  preco: ''
-};
 
 export default TableSelects;

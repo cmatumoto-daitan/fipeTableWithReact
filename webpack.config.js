@@ -36,5 +36,6 @@ module.exports = {
       }
     ]
   },
+  mode: 'development',
   plugins: [htmlWebpackPlugin]
 };

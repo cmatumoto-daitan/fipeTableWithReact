@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TableSelect from './components/TableSelects.jsx'
+import App from './components/app.jsx'
 
-
-ReactDOM.render(<TableSelect />,
+ReactDOM.render(<App />,
 	document.getElementById("index"));

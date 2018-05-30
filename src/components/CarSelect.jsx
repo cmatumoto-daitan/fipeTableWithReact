@@ -37,7 +37,7 @@ class CarSelect extends React.Component {
 
 		const list = props;
 		let linesOption = '';
-		if (props !== undefined) {
+		if (props !== undefined && props.length !== 0 && props.length !== undefined ) {
 			linesOption = list.map((line) =>
 				<option key={line.key} id={line.id}>{line.name}</option>
 			);
@@ -50,7 +50,7 @@ class CarSelect extends React.Component {
 
 	render() {
 		const options = this.renderLineOptions(this.props.list);
-		return (<select size='5' width='200' onClick={this.props.onClick}> {options} </select>)
+		return (<select size='5' name={this.props.name} width='200' onClick={this.props.onClick}> {options} </select>)
 	}
 }
 
