@@ -1,16 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import TableSelect from './TableSelects.jsx'
+import TableSelect from './TableSelects';
 
-class App extends React.Component{
-	render(){
-		return(
-			<div>
-				<h1 align='center'>Fipe Table</h1>
-				<TableSelect />
-			</div>
-		)
-	}
+function App() {
+  return (
+    <div>
+      <h1 align="center">Fipe Table</h1>
+      <TableSelect />
+    </div>);
 }
 
 export default App;
